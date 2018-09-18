@@ -5,13 +5,12 @@ import store, { deleteProduct } from './store'
 
 let count = 0
 
-const ProductList = (props) => {
-    console.log(`Pass #${count++} : Props = `, props)
-    const { products, eventHandler } = props
+const ProductList = ({ products, eventHandler }) => {
+    //Logic for ordering/sort
 
     return (
         <ul>
-            {products.map(product => <Product key={product.id} id={product.id} name={product.name} rating={product.rating} eventHandler={eventHandler} />)}
+            {products.sort((a, b) => b.rating - a.rating).map(product => <Product key={product.id} id={product.id} name={product.name} rating={product.rating} eventHandler={eventHandler} />)}
         </ul>
     )
 }

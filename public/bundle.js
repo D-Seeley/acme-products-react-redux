@@ -226,6 +226,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var Nav = function Nav(props) {
     console.log('Nav Rendering', props);
+    var topProduct = props.products.sort(function (a, b) {
+        return a.rating < b.rating;
+    });
+
+    var rating = topProduct[0] ? topProduct[0].rating : 'rating';
 
     //Will eventually need to pass down prop with id to product
     return _react2.default.createElement(
@@ -241,7 +246,7 @@ var Nav = function Nav(props) {
                     _reactRouterDom.Link,
                     { to: '/' },
                     'Products (',
-                    'count',
+                    props.products.length,
                     ')'
                 )
             ),
@@ -252,7 +257,7 @@ var Nav = function Nav(props) {
                     _reactRouterDom.Link,
                     { to: '/Product' },
                     'Top Product (',
-                    'rating',
+                    rating,
                     ')'
                 )
             ),
@@ -271,6 +276,10 @@ var Nav = function Nav(props) {
     );
 };
 
+var mapStateToProps = function mapStateToProps(state) {
+    return { products: state.products };
+};
+
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         eventHandler: function eventHandler() {
@@ -279,7 +288,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     };
 };
 
-var ConnectedNav = (0, _reactRedux.connect)(null, mapDispatchToProps)(Nav);
+var ConnectedNav = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Nav);
 console.log(_store2.default.getState());
 
 exports.default = ConnectedNav;
@@ -368,16 +377,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var count = 0;
 
-var ProductList = function ProductList(props) {
-    console.log('Pass #' + count++ + ' : Props = ', props);
-    var products = props.products,
-        eventHandler = props.eventHandler;
+var ProductList = function ProductList(_ref) {
+    var products = _ref.products,
+        eventHandler = _ref.eventHandler;
 
+    //Logic for ordering/sort
 
     return _react2.default.createElement(
         'ul',
         null,
-        products.map(function (product) {
+        products.sort(function (a, b) {
+            return b.rating - a.rating;
+        }).map(function (product) {
             return _react2.default.createElement(_Product2.default, { key: product.id, id: product.id, name: product.name, rating: product.rating, eventHandler: eventHandler });
         })
     );

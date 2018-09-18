@@ -23,8 +23,8 @@ router.delete('/products/:id', (req, res, next)=> {
 
 router.post('/', async (req, res, next)=> {
     return product.create(req.body)
-    .then(_product => res.json(_product._previousDataValues))
-    .catch(next)    
+        .then(_product => res.json(_product._previousDataValues))
+        .catch(next)    
 })
 
 module.exports = router;
